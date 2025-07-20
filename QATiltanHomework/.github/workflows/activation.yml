@@ -1,0 +1,38 @@
+name: Unity Torch Project CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run EditMode Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache Library
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ runner.os }}-${{ hashFiles('**/Assets/**', '**/Packages/**', '**/ProjectSettings/**') }}
+
+      - name: Set up Unity
+        uses: game-ci/unity-setup@v3
+        with:
+          unityVersion: 6000.0.47f1
+      - name: Run EditMode Tests
+        uses: game-ci/unity-test-runner@v3
+        with:
+          testMode: EditMode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestResults
+          path: artifacts
