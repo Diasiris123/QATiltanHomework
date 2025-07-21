@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         projectPath:
-          - QATiltanHomework  # ⬅️ This matches your folder name
+          - QATiltanHomework 
         testMode:
           - editmode
           - playmode
